@@ -142,3 +142,50 @@ fun dates_in_months_challenge (dates : (int*int*int) list, months : int list) =
 	dates_in_months (dates, remove_duplicates(months))
 
 
+(*13*)
+fun reasonable_date (date : int*int*int) =
+	let
+	    val year = #1 date
+	    val month = #2 date
+	    val day = #3 date
+	    val days_in_months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+	    val leap_days_in_months =[31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+	    fun get_nth (str_list : int list, n : int) =
+			if n = 1 then hd str_list
+			else get_nth(tl str_list, n-1)
+
+	    fun is_reasonable_year (year : int) =
+	    	if year > 0 then true else false
+
+	    fun is_leap_year (year : int) =
+	    	if year > 0 andalso ((year mod 400 = 0) orelse (year mod 4 = 0) andalso (year mod 100 <> 0))
+	    	then true
+	    	else false
+
+	    fun is_reasonable_month (month : int) =
+	    	if month >= 1 andalso month <=12 then true else	false
+
+	in
+		if is_reasonable_year(year) andalso is_reasonable_month(month) andalso day > 0
+		then
+		    if is_leap_year(year)
+		    then
+		    	day <= get_nth(leap_days_in_months, month)
+		    else
+		    	day <= get_nth(days_in_months, month)
+		else false
+
+	end
+
+
+(* additional test by houxianxu*)
+
+(*test 12*)
+(*val test12_a = number_in_months_challenge([(2012,2,28),(2013,12,1),(2011,3,31),(2011,4,28)],[2,3,3,4]) = 3
+val test12_a = dates_in_months_challenge([(2012,2,28),(2013,12,1),(2011,3,31),(2011,4,28)],[2,3,3,4]) = [(2012,2,28),(2011,3,31),(2011,4,28)]*)
+
+(*test 13*) 
+(*val test13_a = reasonable_date(2004, 2, 29) leap year
+val test13_b = reasonable_date(1990, 3, 23)
+val test13_c = reasonable_date(2004, 2, 29)*)
